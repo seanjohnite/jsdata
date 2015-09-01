@@ -110,7 +110,7 @@ var seedDB = function() {
 }
 
 mongoose.connection.once('open', function() {
-	wipeDB().then(seedDB);
+	wipeDB().then(seedDB).then(function() {console.log("finished")});
 })
 
 

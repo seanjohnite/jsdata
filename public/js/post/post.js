@@ -4,24 +4,33 @@ app.config(function($stateProvider) {
 	$stateProvider.state('post', {
 		url: '/post/:postId',
 		templateUrl: 'js/post/post.html',
-		controller: 'PostCtrl', 
+		controller: 'PostCtrl'
+		, 
 		resolve: {
 			users: function(User){
 				// GET - > '/api/users'
-				return User.findAll()
+				return User.findAll();
 			}
 		}
 	})
 });
 
+
 // add necessary dependencies 
-app.controller('PostCtrl', function() {
+app.controller('PostCtrl', function($scope, $stateParams, Post, users) {
 
 
 	/* 1. FIND POST
 		use state params to retrieve the post id and attach post object to scope 
 		on controller load 
 	*/
+
+	Post.find($stateParams.postId)
+	.then(function (foundPost) {
+		console.log(foundPost);
+		$scope.post = foundPost;
+	});
+
 
 	/*
 		2. DELETE POST 
