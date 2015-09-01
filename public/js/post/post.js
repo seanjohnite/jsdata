@@ -10,6 +10,9 @@ app.config(function($stateProvider) {
 			users: function(User){
 				// GET - > '/api/users'
 				return User.findAll();
+			},
+			post: function (Post, $stateParams) {
+				return Post.find($stateParams.postId);
 			}
 		}
 	})
@@ -17,26 +20,32 @@ app.config(function($stateProvider) {
 
 
 // add necessary dependencies 
-app.controller('PostCtrl', function($scope, $stateParams, Post, users) {
+app.controller('PostCtrl', function($scope, $stateParams, $state, Post, users, post) {
 
 
 	/* 1. FIND POST
 		use state params to retrieve the post id and attach post object to scope 
 		on controller load 
 	*/
-
-	Post.find($stateParams.postId)
-	.then(function (foundPost) {
-		console.log(foundPost);
-		$scope.post = foundPost;
-	});
-
+	$scope.post = post;
 
 	/*
 		2. DELETE POST 
 		create a function that destroys the post, adds an alert that the post has been 
 		successfully deleted, and redirects to the main state. 
 	*/
+	$scope.deletePost = function () {
+		Post.destroy($stateParams.postId)
+		.then(function () {
+			$state.go("main");
+		})
+		.catch(function (error) {
+			console.error(error);
+		});
+	};
+
+
+
 
 	/*
 		3. EDIT POST 

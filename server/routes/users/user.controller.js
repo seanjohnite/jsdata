@@ -22,8 +22,10 @@ module.exports = {
   },
 
   create: function(req, res, next){
+    console.log("req body:", req.body);
     User.create(req.body)
     .then(function(newUser) {
+      console.log("new user:", newUser);
       res.json(newUser);
     })
     .then(null, next)
